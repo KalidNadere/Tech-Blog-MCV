@@ -1,3 +1,13 @@
 {
-  
+  "development": {
+    "username": "root",
+    "password": null,
+    "databse": "blog_db",
+    "host": "localhost",
+    "dialect": "mysql"
+  },
+  "production": {
+    "use_env_variable": "DATABASE_URL",
+    "dialect": "mysql"
+  }
 }
