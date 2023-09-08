@@ -15,8 +15,20 @@
     {{/each}}
   </ul>
   
-  <!-- Add a form to submit comments here -->
+<!-- Comment form -->
+<form action="/api/posts/{{post.id}}/comments" method="POST">
+  <label for="comment">Add a Comment:</label>
+  <textarea id="comment" name="comment" rows="4" required></textarea>
+  <button type="submit">Submit Comment</button>
+</form>
   
-  <!-- Add navigation links here -->
+  <!-- Navigation links -->
+  <div class="navigation-links">
+    <a href="/">Home</a>
+    <a href="/dashboard">Dashboard</a>
+    <a href="/login">Login</a>
+    <a href="/signup">Signup</a>
+  </div>
+
 </body>
 </html>

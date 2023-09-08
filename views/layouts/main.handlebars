@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{pageTitle}}</title>
+  <!-- CSS and JavaScript file links -->
+  <link rel="stylesheet" href="/css/styles.css">
+  <!-- CSS or JavaScript links -->
+</head>
+<body>
+  <header>
+    <!-- navigation bar here (from navbar.handlebars) -->
+    {{> navbar}}
+  </header>
+
+  <main>
+    <!-- Content of the individual views will be inserted here -->
+    {{{body}}}
+  </main>
+
+  <footer>
+    <p>&copy; 2023 Your Blog</p>
+  </footer>
+
+  <script src="/js/main.js"></script>
+</body>
+</html>
