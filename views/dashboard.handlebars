@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Dashboard</title>
+</head>
+<body>
+  <h1>Dashboard</h1>
+  
+  <h2>Your Blog Posts</h2>
+  <ul>
+    {{#each userPosts}}
+      <li>
+        <a href="/post/{{this.id}}">{{this.title}}</a>
+        <button class="edit-post">Edit</button>
+        <button class="delete-post">Delete</button>
+      </li>
+    {{/each}}
+  </ul>
+  
+  <!-- Button to create a new post -->
+  <button class="create-post">Create New Post</button>
+  
+  <!-- Navigation links -->
+  <div class="navigation-links">
+    <a href="/">Home</a>
+    <a href="/login">Login</a>
+    <a href="/signup">Signup</a>
+  </div>
+</body>
+</html>

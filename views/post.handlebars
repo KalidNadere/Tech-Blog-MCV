@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>{{post.title}}</title>
+</head>
+<body>
+  <h1>{{post.title}}</h1>
+  <p>{{post.content}}</p>
+  <p>Posted by: {{post.User.username}}</p>
+  
+  <h2>Comments</h2>
+  <ul>
+    {{#each post.Comments}}
+      <li>{{this.text}} (by {{this.User.username}})</li>
+    {{/each}}
+  </ul>
+  
+  <!-- Add a form to submit comments here -->
+  
+  <!-- Add navigation links here -->
+</body>
+</html>
