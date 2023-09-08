@@ -5,6 +5,7 @@ const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 const db = require("./models");
 const PORT = process.env.PORT || 3000;
+const passportConfig = require("./config/passport");
 
 const app = express();
 
@@ -17,6 +18,8 @@ app.use(express.static("public"));
 // Serves static files from public directory, allowing client to access client-side assets e.g. HTML, CSS, JS and images
 
 // Passport initialization
+passportConfig(passport);
+
 passport.use(
   new LocalStrategy(
     {
