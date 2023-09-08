@@ -3,9 +3,13 @@ const session = require("express-session");
 const SequelizeStore = require("connect-session-sequelize")(session.Store);
 const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
-const db = require("./models");
 const PORT = process.env.PORT || 3000;
 const passportConfig = require("./config/passport");
+const Comment = require("./models/Comment");
+const Post = require("./models/Post");
+const User = require("./models/User");
+
+const db = require("./models");
 
 const app = express();
 
