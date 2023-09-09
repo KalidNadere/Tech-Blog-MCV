@@ -1,4 +1,5 @@
-const { Comment, Post } = require('../models');
+const Comment = require('../models/Comment');
+const Post = require("../models/Post")
 
 const commentcontroller = {
   // Create new comment

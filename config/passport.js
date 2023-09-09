@@ -3,7 +3,8 @@ const passport = require("passport");
 // Importing localStrategy constructor for username and password authentication
 const LocalStrategy = require("passport-local").Strategy; 
 // Importing database connection from models
-const db = require("../models") 
+
+// const db = require("../models") 
 
 // Configures Passport to use LocalStrategy for authentication whether user exists and password is valid
 passport.use( 

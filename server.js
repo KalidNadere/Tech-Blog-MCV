@@ -5,11 +5,11 @@ const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 const PORT = process.env.PORT || 3000;
 const passportConfig = require("./config/passport");
-const Comment = require("./models/Comment");
-const Post = require("./models/Post");
-const User = require("./models/User");
+const Comment = require("./models/Comment.js");
+const Post = require("./models/Post.js");
+const User = require("./models/User.js");
 
-const db = require("./models");
+// const db = require("./models");
 
 const app = express();
 
