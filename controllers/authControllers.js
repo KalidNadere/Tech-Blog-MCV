@@ -1,46 +1,57 @@
-const passport = require("passport");
-// const db = require("../models");
+const db = require("../models");
+const bcrypt = require("bcrypt");
 
 const authController = {
   // User registration
-  register: (req, res) => {
-    const { username, passport } = req.body;
-    db.User.create({ username, password })
-    .then(() => {
+  register: async (req, res) => {
+    try {
+      const { username, password } = req.body;
+      const existingUser = await db.User.findOne({ where: { username } });
+
+      if (existingUser) {
+        return res.status(400).json({ message: "Username already exists" });
+      }
+
+      const hashedPassword = await bcrypt.hash(password, 10);
+      await db.User.create({ username, password: hashedPassword });
       res.status(201).json({ message: "Registration successful" });
-    })
-    .catch((err) => {
+    } catch (err) {
       res.status(400).json({ message: "Registration failed", error: err.message });
-    });
+    }
   },
 
   // User login
-  login: (req, res, next) => {
-    passport.authenticate("local", (err, user, info) => {
-      if (err) {
-        return next(err);
-      }
+  login: async (req, res) => {
+    const { username, password } = req.body;
+    try {
+      const user = await db.User.findOne({ where: { username } });
+
       if (!user) {
-        return res.status(401).json({ message: "Authentication failed", error: info.message });
+        return res.status(401).json({ message: "Authentication failed" });
       }
-      req.logIn(user, (err) => {
-        if (err) {
-          return next(err);
-        }
-        return res.status(200).json({ message: "Login successful", user });
-      });
-    })(req, res, next);
+
+      const passwordMatch = await bcrypt.compare(password, user.password);
+
+      if (!passwordMatch) {
+        return res.status(401).json({ message: "Authentication failed" });
+      }
+
+      req.session.user = user;
+      res.status(200).json({ message: "Login successful", user });
+    } catch (err) {
+      res.status(500).json({ message: "Login failed", error: err.message });
+    }
   },
 
   // User logout
   logout: (req, res) => {
-    req.logout();
+    req.session.destroy();
     res.status(200).json({ message: "Logout successful" });
   },
 
   // Middleware to check if user is authenticated
   isAuthenticated: (req, res, next) => {
-    if (req.isAuthenticated()) {
+    if (req.session.user) {
       return next();
     }
     res.status(401).json({ message: "Authentication required" });
