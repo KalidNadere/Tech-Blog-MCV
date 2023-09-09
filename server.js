@@ -1,15 +1,10 @@
 const express = require("express");
 const session = require("express-session");
 const SequelizeStore = require("connect-session-sequelize")(session.Store);
-const passport = require("passport");
-const LocalStrategy = require("passport-local").Strategy;
 const PORT = process.env.PORT || 3000;
-const passportConfig = require("./config/passport");
 const Comment = require("./models/Comment.js");
 const Post = require("./models/Post.js");
 const User = require("./models/User.js");
-
-// const db = require("./models");
 
 const app = express();
 
@@ -21,76 +16,70 @@ app.use(express.json());
 app.use(express.static("public"));
 // Serves static files from public directory, allowing client to access client-side assets e.g. HTML, CSS, JS and images
 
-// Passport initialization
-passportConfig(passport);
-
-passport.use(
-  new LocalStrategy(
-    {
-      usernameField: "username", // field for username in login form
-      passwordField: "password", // field for password in login form
-    },
-    (username, password, done) => {
-      // finding user with provided username in database
-      db.User.findOne({ where: { username } })
-      .then((user) => {
-        if (!user) {
-          // If no user is found, return error message
-          return done(null, false, { message: "Incorrect username." });
-        }
-
-        // Check if password provided matches the user's hashed password
-        if (!user.validPassword(password)) {
-          // If password does not match, return error message
-          return done(null, false, { message: "Incorrect password." });
-        }
-
-        // If username and password are correct, return user object
-        return done(null, user);
-      })
-      .catch((err) => {
-        // If there's an error, handle it (e.g. log it or return an error)
-        return done(err);
-      });
-    }
-  )
-);
-
-// Serialize user information to store in the session
-passport.serializeUser((user, cb) => {
-  cb(null, user.id);
-});
-
-// Deserialize user information from the session
-passport.deserializeUser((id, cb) => {
-  db.User.findByPk(id)
-  .then((user) => {
-    cb(null, user);
-  })
-  .catch((err) => {
-    cb(err);
-  });
-});
-
 // session setup
 app.use(
   session({
     secret: "your-secret",
     resave: false,
     saveUninitialized: true,
-    store: new SequelizeStore({ db }),
+    store: new SequelizeStore({ db: User.Sequelize }),
   })
 );
 
-app.use(passport.initialize());
-app.use(passport.session());
+// Authentication logic
+app.post("login", async (req, res) => {
+  const { username, password } = req.body;
 
-// Routes
-require("./routes/api")(app);
-require("./routes/html")(app);
+  try {
+    const user = await User.findOne({ where: { username } });
+
+    if (!user) {
+      return res.status(401).json({ message: "Incorrect username." });
+    }
+
+    const passwordMatch = await bcrypt.compare(password, user.passport);
+
+    if (!passwordMatch) {
+      return res.status(401).json({ message: "Incorrect password." });
+    }
+
+    // Setting user's ID in the session
+    req.session.userId = user.id;
+
+    return res.status(200).json({ message: "Login successful." });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Internal server error." });
+  }
+});
+
+app.post("/logout", (req, res) => {
+  // Clear session data to log the user out
+  req.session.destroy((err) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json({ message: "Internal server error." });
+    }
+    return res.status(200).json ({ message: "Logout successful." });
+  });
+});
+
+// Protect routes that require authentication
+const requireAuth = (req, res, next) => {
+  if (!req.session.userId) {
+    return res.status(401).json({ message: "Unauthorized." });
+  }
+  next();
+};
+
+// Example protected route
+app.get ("/dashboard", requireAuth, (req, res) => {
+  // Access user's ID from req.session.userId
+  return res.status(200).json({ message: "Access granted to protected route." });
+});
 
 // Sync database and start server
-db.Sequelize.sync({ force: false }).then(() => {
+User.sequelize.sync({ forces: false }).then(() => {
   app.listen(PORT, () => {
     console.log(`App listening on http://localhost:${PORT}`);
   });
