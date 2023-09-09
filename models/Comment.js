@@ -1,5 +1,10 @@
-module.exports = function (sequelize, DataTypes) { // Exporting function with 2 parameters; sequelize and DataTypes
-  const Comment = sequelize.define("comment", { // Defines sequelize model 'Comment' with attributes specified within object 
+const { DataTypes } = require("sequelize");
+
+// Exporting function with 2 parameters; sequelize and DataTypes
+module.exports = (sequelize) => { 
+
+// Defines sequelize model 'Comment' with attributes specified within object 
+  const Comment = sequelize.define("comment", { 
     text: {
       type: DataTypes.TEXT,
       allowNull: false,

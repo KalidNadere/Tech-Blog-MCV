@@ -1,9 +1,13 @@
-module.exports = function (sequelize, DataTypes) { // Exporting function with parameters sequelize and datatypes
-  const User = sequelize.define("User", { // Defining sequelize model 'User', specifying its attributes and their data types
+const { DataTypes } = require("sequelize");
+
+// Exporting sequelize
+module.exports = (sequelize) => { 
+
+// Defining sequelize model 'User', specifying its attributes and their data types
+  const User = sequelize.define("User", { 
     username: { 
       type: DataTypes.STRING,
       allowNull: false,
-      unique: true,
     },
     password: {
       type: DataTypes.STRING,
@@ -11,7 +15,8 @@ module.exports = function (sequelize, DataTypes) { // Exporting function with pa
     },
   });
 
-  User.associate = function (models) { // Defining association between User model and Post model, using hasMany association
+// Defining association between User model and Post model, using hasMany association
+  User.associate = function (models) { 
     User.hasMany(models.Post, {
       onDelete: "cascade",
     });

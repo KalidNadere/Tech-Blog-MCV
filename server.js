@@ -4,6 +4,12 @@ const SequelizeStore = require("connect-session-sequelize")(session.Store);
 const bcrypt = require("bcrypt");
 const db = require("./models");
 const PORT = process.env.PORT || 3000;
+require('dotenv').config();
+
+
+const User = require("./models/User.js");
+const Comment = require("./models/Comment");
+const Post = require("./models/Post")
 
 
 const app = express();
@@ -22,12 +28,12 @@ app.use(
     secret: "your-secret",
     resave: false,
     saveUninitialized: true,
-    store: new SequelizeStore({ db: User.Sequelize }),
+    store: new SequelizeStore({ db: db.sequelize }),
   })
 );
 
 // Authentication logic
-app.post("login", async (req, res) => {
+app.post("/login", async (req, res) => {
   const { username, password } = req.body;
 
   try {
