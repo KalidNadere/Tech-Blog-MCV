@@ -1,10 +1,10 @@
 const express = require("express");
 const session = require("express-session");
 const SequelizeStore = require("connect-session-sequelize")(session.Store);
+const bcrypt = require("bcrypt");
+const db = require("./models");
 const PORT = process.env.PORT || 3000;
-const Comment = require("./models/Comment.js");
-const Post = require("./models/Post.js");
-const User = require("./models/User.js");
+
 
 const app = express();
 
@@ -31,7 +31,7 @@ app.post("login", async (req, res) => {
   const { username, password } = req.body;
 
   try {
-    const user = await User.findOne({ where: { username } });
+    const user = await db.User.findOne({ where: { username } });
 
     if (!user) {
       return res.status(401).json({ message: "Incorrect username." });
@@ -60,7 +60,7 @@ app.post("/logout", (req, res) => {
       console.error(err);
       return res.status(500).json({ message: "Internal server error." });
     }
-    return res.status(200).json ({ message: "Logout successful." });
+    return res.status(200).json({ message: "Logout successful." });
   });
 });
 
@@ -79,7 +79,7 @@ app.get ("/dashboard", requireAuth, (req, res) => {
 });
 
 // Sync database and start server
-User.sequelize.sync({ forces: false }).then(() => {
+db.sequelize.sync({ forces: false }).then(() => {
   app.listen(PORT, () => {
     console.log(`App listening on http://localhost:${PORT}`);
   });
