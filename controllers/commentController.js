@@ -1,7 +1,7 @@
 const Comment = require('../models/Comment');
-const Post = require("../models/Post")
+const Post = require('../models/Post');
 
-const commentcontroller = {
+const commentController = {
   // Create new comment
   createComment: async (req, res) => {
     try {
@@ -11,27 +11,26 @@ const commentcontroller = {
       if (!userId) {
         return res.status(401).json({ message: 'You must be logged in to add a comment.' });
       }
-      
+
       const newComment = await Comment.create({
         text: comment,
-        userId: userId, //Associating comment with lodgged-in user
-        postId: postId, // Associating comment with corresponding post
+        userId: userId, // Associating comment with logged-in user
+        postId: postId, // Associating comment with the corresponding post
       });
 
       return res.status(201).json(newComment);
     } catch (err) {
       console.error(err);
-      return res.status(500).json({ message: "Internal server error" });
+      return res.status(500).json({ message: 'Internal server error' });
     }
   },
-
 
   // Update a comment
   updateComment: async (req, res) => {
     try {
       const { commentId, newText } = req.body;
       const userId = req.session.userId;
-      
+
       if (!userId) {
         return res.status(401).json({ message: 'You must be logged in to update a comment.' });
       }
@@ -43,7 +42,7 @@ const commentcontroller = {
         return res.status(404).json({ message: 'Comment not found.' });
       }
 
-      if (existingComment.UserId !== userId) {
+      if (existingComment.userId !== userId) {
         return res.status(403).json({ message: 'You are not authorized to update this comment.' });
       }
 
@@ -63,7 +62,7 @@ const commentcontroller = {
     try {
       const { commentId } = req.params;
       const userId = req.session.userId;
-      
+
       if (!userId) {
         return res.status(401).json({ message: 'You must be logged in to delete a comment.' });
       }
@@ -75,7 +74,7 @@ const commentcontroller = {
         return res.status(404).json({ message: 'Comment not found.' });
       }
 
-      if (existingComment.UserId !== userId) {
+      if (existingComment.userId !== userId) {
         return res.status(403).json({ message: 'You are not authorized to delete this comment.' });
       }
 
@@ -90,4 +89,4 @@ const commentcontroller = {
   },
 };
 
-module.exports = commentcontroller;
+module.exports = commentController;
