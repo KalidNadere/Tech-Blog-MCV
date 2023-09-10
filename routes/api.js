@@ -26,9 +26,9 @@ router.delete("/comments/:id", authController.isAuthenticated, commentController
 router.post("/register", authController.register);
 
 // User login
-router.login("/login", authController.login);
+router.post("/login", authController.login);
 
 // User logout
-router.logout("/logout", authController/logout);
+router.post("/logout", authController/logout);
 
 module.exports = router;
