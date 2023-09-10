@@ -10,7 +10,7 @@ router.get("/", postController.renderHomepage);
 router.get("/dashboard", authController.isAuthenticated, postController.renderHomepage);
 
 // Login page
-router.get("/login", authController.renderLoginPage);
+router.get("/login", authController.loginPage);
 
 // Signup page
 router.get("/signup", authController.renderSignupPage);
