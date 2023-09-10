@@ -6,17 +6,24 @@ const db = require("./models");
 const PORT = process.env.PORT || 3000;
 require('dotenv').config();
 const authController = require("./controllers/authControllers");
-
-const User = require("./models/User.js");
+const helpers = require("./utils/helpers");
+const exphbs = require("express-handlebars");
+const hbs = exphbs.create({ helpers });const User = require("./models/User.js");
 const Comment = require("./models/Comment");
 const Post = require("./models/Post");
+const path = require('path');
 
 const app = express();
 
 // Middleware
 app.use(express.urlencoded({ extended: true })); 
 app.use(express.json()); 
-app.use(express.static("public"));
+// app.use(express.static("public"));
+app.use(express.static(path.join(__dirname, 'public')));
+
+
+app.engine("handlebars", hbs.engine);
+app.set("view engine", "handlebars");
 
 // session setup
 app.use(

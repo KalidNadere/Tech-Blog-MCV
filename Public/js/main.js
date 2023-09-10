@@ -1,6 +1,6 @@
 // Wait for the DOM to be fully loaded
 document.addEventListener("DOMContentLoaded", function () {
-  // Add event listeners, manipulate the DOM, etc.
+  // Add event listener, manipulate the DOM, etc.
   
   // Handle a button click
   const button = document.querySelector("#myButton");

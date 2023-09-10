@@ -49,6 +49,11 @@ const authController = {
     res.status(200).json({ message: "Logout successful" });
   },
 
+  // Render signup page
+  renderSignupPage: (req, res) => {
+    res.render("signup");
+  },
+
   // Middleware to check if user is authenticated
   isAuthenticated: (req, res, next) => {
     if (req.session.user) {
