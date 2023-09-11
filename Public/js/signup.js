@@ -9,7 +9,7 @@ async function signupForm(event) {
   // Checking if both username and password are provided
   if (username && password) { 
     // Sending POST request to the '/api/register' route with the username and password data
-    const response = await fetch('/api/users', {
+    const response = await fetch('/api/register', {
       method: 'POST', // Using POST method for registration
       body: JSON.stringify({ username, password }), // Converting data to JSON format
       headers: { 'Content-Type': 'application/json' }, // Setting request headers

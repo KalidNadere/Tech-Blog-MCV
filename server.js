@@ -25,8 +25,7 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use('/public/css', express.static(path.join(__dirname, 'public/css'), { 'Content-Type': 'text/css' }));
-app.use('/javascript', express.static(path.join(__dirname, 'javascript'), { 'Content-Type': 'application/javascript' }));
-
+app.use('/public/js', express.static(path.join(__dirname, '/public/js'), { 'Content-Type': 'application/js' }));
 
 const sess = {
   secret: process.env.DB_SECRET, // secret for session data
