@@ -47,6 +47,16 @@ app.use(express.urlencoded({
 })); // Parse URL-encoded request bodies
 app.use(routes); // Use defined routes/controllers
 
+// Define the api/register route for user registration
+  app.post('/api/register', async (req, res) => {
+    try {
+  const { username, password } = req.body;
+      // If registration is successful, you can send a response like:
+      res.status(200).json({ message: 'Registration successful' });
+    } catch (err) {
+        res.status(500).json({ error: 'Registration failed' });
+    }
+  });
 
 sequelize.sync(); // Sync the Sequelize database
 
