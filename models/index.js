@@ -1,34 +1,41 @@
-const Sequelize = require("sequelize");
-const env = process.env.NODE_ENV || "development";
-const config = require("../config.js");
+// Importing User, Post, and Comment models
+const User = require('./User');
+const Post = require('./Post');
+const Comment = require('./Comment');
 
-// const sequelize = new Sequelize(config.database, config.username, config.password, config);
+// Defining associations between the models
+// User can have many Posts, and the user_id foreign key in Post references User's id
+User.hasMany(Post, {
+  foreignKey: 'user_id',   
+  onDelete: 'CASCADE',  // onDelete behavior for related Posts
+});
 
-const sequelize = new Sequelize('sqlite::memory:');
-const db = {};
+// Post belongs to a User, and it has a foreign key user_id that references User's id
+Post.belongsTo(User, {
+  foreignKey: 'user_id',
+});
 
-// Import model files
-const User = require("./User");
-const Post = require("./Post");
-const Comment = require("./Comment");
+// User can have many Comments, and the user_id foreign key in Comment references User's id
+User.hasMany(Comment, {
+  foreignKey: 'user_id', 
+  onDelete: 'CASCADE', 
+});
 
-// Initializing each model with sequelize instance
-db.User = User(sequelize);
-db.Post = Post(sequelize);
-db.Comment = Comment(sequelize);
+// Comment belongs to a User, and it has a foreign key user_id that references User's id
+Comment.belongsTo(User, {
+  foreignKey: 'user_id',
+});
 
-// Defining associations between models
-db.User.hasMany(db.Post);
-db.Post.belongsTo(db.User);
+// Post can have many Comments, and the post_id foreign key in Comment references Post's id
+Post.hasMany(Comment, {
+  foreignKey: 'post_id',  
+  onDelete: 'CASCADE',  
+});
 
-db.User.hasMany(db.Comment);
-db.Comment.belongsTo(db.User);
+// Comment belongs to a Post, and it has a foreign key post_id that references Post's id
+Comment.belongsTo(Post, {
+  foreignKey: 'post_id', 
+});
 
-db.Post.hasMany(db.Comment); 
-db.Comment.belongsTo(db.Post);
-
-// Exporting Sequelize instance and models
-db.sequelize = sequelize;
-db.Sequelize = Sequelize;
-
-module.exports = db;
+// Exporting User, Post, and Comment models for use in other parts of the application
+module.exports = { User, Post, Comment };
