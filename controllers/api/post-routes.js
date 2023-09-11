@@ -1,90 +1,71 @@
+// Import the Express Router and the Post model from the 'models' directory
 const router = require('express').Router();
-const { Post, User, Comment } = require('../../models');
-const withAuth = require('../../utils/auth');
+const { Post } = require('../../models');
 
-// Get all posts
-router.get('/', async (req, res) => {
-  try {
-    const postData = await Post.findAll({
-      include: [
-        {
-          model: User,
-          attributes: ['username'],
-        },
-        {
-          model: Comment,
-          attributes: ['id', 'text', 'user_id', 'post_id', 'created_at'],
-          include: {
-            model: User,
-            attributes: ['username'],
-          },
-        },
-      ],
+// Create a new post using the form input values from the dashboard page (template)
+router.post('/', (req, res) => {
+  // Create a new Post record in the database with data from the request body
+  Post.create({
+    title: req.body.post_title,        
+    description: req.body.post_desc,   
+    user_id: req.session.user_id,      
+  })
+    .then((dbPostData) => res.json(dbPostData)) 
+    .catch((err) => {
+      console.log(err);                 
+      res.status(500).json(err);       
     });
-    res.status(200).json(postData);
-  } catch (err) {
-    res.status(500).json(err);
-  }
 });
 
-// Create a new post
-router.post('/', withAuth, async (req, res) => {
-  try {
-    const newPost = await Post.create({
-      title: req.body.title,
-      content: req.body.content,
-      user_id: req.session.user_id,
-    });
-    res.status(201).json(newPost);
-  } catch (err) {
-    res.status(400).json(err);
-  }
-});
-
-// Update a post by ID
-router.put('/:id', withAuth, async (req, res) => {
-  try {
-    const updatedPost = await Post.update(
-      {
-        title: req.body.title,
-        content: req.body.content,
-      },
-      {
-        where: {
-          id: req.params.id,
-        },
+// Delete a post
+router.delete('/:id', (req, res) => {
+  // Delete a Post record from the database based on the provided post ID
+  Post.destroy({
+    where: {
+      id: req.params.id,               
+    },
+  })
+    .then((dbUserData) => {
+      if (!dbUserData) {
+        // If no post is found with the provided ID, send a 404 response
+        res.status(404).json({ message: 'No Post found with this id' });
+        return;
       }
-    );
-
-    if (!updatedPost[0]) {
-      res.status(404).json({ message: 'No post found with this id' });
-      return;
-    }
-
-    res.status(200).json({ message: 'Post updated successfully' });
-  } catch (err) {
-    res.status(500).json(err);
-  }
-});
-
-// Delete a post by ID
-router.delete('/:id', withAuth, async (req, res) => {
-  try {
-    const deletedPost = await Post.destroy({
-      where: {
-        id: req.params.id,
-      },
+      res.json(dbUserData);            
+    })
+    .catch((err) => {
+      console.log(err);                  
+      res.status(500).json(err);        
     });
-
-    if (!deletedPost) {
-      res.status(404).json({ message: 'No post found with this id' });
-      return;
-    }
-
-    res.status(200).json({ message: 'Post deleted successfully' });
-  } catch (err) {
-    res.status(500).json(err);
-  }
 });
 
-module.exports = router;
+// Update a post
+router.put('/:id', (req, res) => {
+  // Update the title and description of an existing post in the database
+
+  Post.update(
+    {
+      title: req.body.title,             
+      description: req.body.description, 
+    },
+    {
+      where: {
+        id: req.params.id,               
+      },
+    }
+  )
+    .then((dbPostData) => {
+      if (!dbPostData) {
+        // If no post is found with the provided ID, send a 404 response
+        res.status(404).json({ message: 'No post found with this id' });
+        return;
+      }
+      res.json(dbPostData);       
+    })
+    .catch((err) => {
+      console.log(err);                 
+      res.status(500).json(err);    
+    });
+});
+
+module.exports = router; 

@@ -7,8 +7,8 @@ const bcrypt = require('bcrypt');
 class User extends Model {
 
   // Method to check if provided password matches the user's hashed password
-  checkPassword(loginPassword) {
-    return bcrypt.compareSync(loginPassword, this.password);
+  checkPassword(loginPw) {
+    return bcrypt.compareSync(loginPw, this.password);
   }
 }
 
@@ -26,6 +26,14 @@ User.init(
       allowNull: false,
       unique: true,
     },
+    email: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true,
+      validate: {
+        isEmail: true,
+      },
+    },
     password: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -41,11 +49,19 @@ User.init(
         newUserData.password = await bcrypt.hash(newUserData.password, 10);
         return newUserData;
       },
+      async beforeUpdate(updatedUserData) {
+        updatedUserData.password = await bcrypt.hash(
+          updatedUserData.password,
+          10
+        );
+        return updatedUserData;
+      },
     },
-    sequelize,    // Passing the sequelize connection
-    freezeTableName: true, // Prevents pluralization of the table name
-    underscored: true,    // Uses underscores in column names
-    modelName: 'user',   // Model name used in queries
+    sequelize,
+    timestamps: false,
+    freezeTableName: true,
+    underscored: true,
+    modelName: 'user',
   }
 );
 

@@ -1,41 +1,46 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<html lang='en'>
+  <head>
+    <meta charset='UTF-8' />
+    <meta name='viewport' content='width=device-width, user-scalable=no' />
+    <link
+      rel='stylesheet'
+      href='../../stylesheets/styles.css'
+      type='text/css'
+    />
+    <link rel='icon' type='image/x-icon' href='/images/favicon.ico' />
     <title>Tech Blog</title>
-    <link rel="stylesheet" href="/public/css/style.css">
-</head>
+  </head>
+  <body>
+    <div class='wrapper'>
+      <header>
+        <div id='header-head'>
+          <h1 id='header-logo'>Tech Blog</h1>
 
-<body>
-    <div class="wrapper">
-        <header>
-            <h1>
-                <a href="/">Home</a>
-            </h1>
-            <nav>
-                {{#if loggedIn}}
-                <a href="/dashboard">Dashboard</a>
-                <button id="logout" class="btn-no-style logout">Logout</button>
-                {{else}} <!-- If the user is not logged in -->
-                <a href="/login">Login</a> <!-- Display a link to the login page -->
-                {{/if}}
-            </nav>
-        </header>
-        <div class="site-row">
-            <div class="site-name">
-                <h1> Tech Blog</h1>
-            </div>
+          {{#if username}}
+            <p id='loggedin'><span>Logged in as</span>
+              <em style='font-weight: 800'>{{username}}</em></p>
+          {{/if}}
         </div>
-        <main>
-            {{{ body }}} <!-- Render main content of the page using template variable "body" -->
-        </main>
+        <nav>
+          <a class='navItem' href='/'>Home</a>
+          <a class='navItem' href='/dashboard'>Dashboard</a>
+         
+          {{#if loggedIn}}
+            <a class='navItem' id='logout'>Logout</a>
+          {{else}}
+            <a class='navItem' href='/login'>Login</a>
+          {{/if}}
+        </nav>
+
+        <div id='bg'></div>
+      </header>
+      <main>
+        {{{body}}}
+      </main>
     </div>
-
-    {{#if loggedIn}} <!-- If user is logged in -->
-    <script src="/js/logout.js"></script>
-    {{/if}}
-</body>
-
+  </body>
 </html>
+<script src='/js/main.js'></script>
+{{#if loggedIn}}
+  <script src='/js/logout.js'></script>
+{{/if}}

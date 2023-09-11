@@ -1,18 +1,15 @@
 const router = require('express').Router();
 
-// Importing routes from separate route files
-const homeRoutes = require('./home-routes');
-const dashboardRoutes = require('./dashboard-routes');
+const homeRoutes = require('./home-routes.js');
+const loginRoutes = require('./login-routes.js');
+const dashboardRoutes = require('./dashboard.js');
+
 const apiRoutes = require('./api');
 
-// Using the imported routes with specific prefixes
-router.use('/', homeRoutes); // Routes for home page
-router.use('/dashboard', dashboardRoutes); // Routes for dashboard
-router.use('/api', apiRoutes); // Routes for API
+router.use('/', homeRoutes);
+router.use('/login', loginRoutes);
+router.use('/dashboard', dashboardRoutes);
 
-// If no route matches the request, this middleware is executed
-router.use((req, res) => {
-  res.status(404).end(); // Respond with a 404 status code
-});
+router.use('/api', apiRoutes);
 
 module.exports = router;

@@ -1,11 +1,18 @@
+// Import the Express Router
 const router = require('express').Router();
 
-const userRoutes = require('./user-routes');
-const postRoutes = require('./post-routes');
-const commentRoutes = require('./comment-routes');
+// Import route modules for home, login, and dachboard
+const homeRoutes = require('./home-routes.js');
+const loginRoutes = require('./login-routes.js');
+const dashboardRoutes = require('./dashboard.js');
 
-router.use('/users', userRoutes);
-router.use('/posts', postRoutes);
-router.use('/comments', commentRoutes);
+const apiRoutes = require('./api');
+
+// Define routes and associate them with their respective route modules
+router.use('/', homeRoutes);
+router.use('/login', loginRoutes);
+router.use('/dashboard', dashboardRoutes);
+
+router.use('/api', apiRoutes);
 
 module.exports = router;

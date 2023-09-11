@@ -1,28 +1,32 @@
-// Function to handle login form submission
-async function loginForm(event) {
-  event.preventDefault(); // Prevent the default form submission behavior
+const loginForm = document.getElementById('login-form');
+const loginStatusEl = document.getElementById('signin-status');
+async function loginFormHandler(event) {
+  event.preventDefault();
 
-  // Get the username and password values from the form
-  const username = document.querySelector('#username-login').value.trim();
-  const password = document.querySelector('#password-login').value.trim();
-
-  if (username && password) { // Check if both username and password are provided
-    // Send POST request to the '/api/login' route with user credentials
+  const email = document.getElementById('email-login').value;
+  const password = document.getElementById('password-login').value;
+  if (email && password) {
     const response = await fetch('/api/users/login', {
-      method: 'POST',
-      body: JSON.stringify({ username, password }), // Convert to JSON format
-      headers: { 'Content-Type': 'application/json' }, // Set request headers
+      method: 'post',
+      body: JSON.stringify({
+        email,
+        password,
+      }),
+      headers: { 'Content-Type': 'application/json' },
     });
 
     if (response.ok) {
-      // If response status is OK (200), redirect to dashboard or another page
-      document.location.replace('/dashboard'); // Redirect to dashboard or another page after successful login
+      document.location.replace('/dashboard');
     } else {
-      // If response status is not OK, show an alert indicating login failure
-      alert('Login failed. Please check your credentials.');
+      loginStatusEl.textContent = 'Email or Password is incorrect';
+      loginStatusEl.style.color = 'red';
+      setTimeout(() => {
+        loginStatusEl.textContent = 'Fill in required values';
+        loginStatusEl.style.color = 'black';
+      }, 2500);
     }
   }
 }
 
-// Event listener to the login form to call the loginFormHandler function on form submission
-document.querySelector('.login-form').addEventListener('submit', loginForm);
+// Event handler for form submission
+loginForm.addEventListener('submit', loginFormHandler);

@@ -1,28 +1,50 @@
-// Function to handle user registration when the signup form is submitted
-async function signupForm(event) {
-  event.preventDefault(); // Prevent the default form submission behavior
+const signupForm = document.getElementById('signup-form');
 
-  // Getting username and password values entered by the user
-  const username = document.querySelector('#username-signup').value.trim();
-  const password = document.querySelector('#password-signup').value.trim();
+async function signupFormHandler(event) {
+  event.preventDefault();
+  // Extract the values from the sign up form
+  const username = document.getElementById('username-signup').value;
+  const email = document.getElementById('email-signup').value;
+  const password = document.getElementById('password-signup').value;
+  const signupStatusEl = document.getElementById('signup-status');
+  if (username.length <= 4 || email.length <= 4 || password.length <= 4) {
+    // If signup value is under 4 characters, notify user
+    signupStatusEl.textContent =
+      'Please make all inputs are filled with character count above 4';
+    signupStatusEl.style.color = 'red';
 
-  // Checking if both username and password are provided
-  if (username && password) { 
-    // Sending POST request to the '/api/register' route with the username and password data
-    const response = await fetch('/api/register', {
-      method: 'POST', // Using POST method for registration
-      body: JSON.stringify({ username, password }), // Converting data to JSON format
-      headers: { 'Content-Type': 'application/json' }, // Setting request headers
+    setTimeout(() => {
+      signupStatusEl.textContent =
+        'Fill in all required inputs with character count above 4';
+      signupStatusEl.style.color = 'black';
+    }, 4000);
+  } else {
+    
+    const response = await fetch(`/api/users`, {
+      method: 'POST',
+      body: JSON.stringify({
+        username,
+        email,
+        password,
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
     });
 
-    if (response.ok) { // If response status is OK (200), registration is successful
-      document.location.replace('/dashboard'); // Redirect to dashboard
+    // If the response is ok, refresh page and redirect to the dashboard
+    if (response.ok) {
+      signupStatusEl.textContent = 'Sign up successful, refreshing...';
+      signupStatusEl.style.color = 'green';
+      setTimeout(() => {
+        document.location.replace('/dashboard');
+      }, 1250);
     } else {
-      // If response status is not OK, show alert indicating registration failure
-      alert('Registration failed. Please try again.');
+      // Otherwise alert the user accordingly
+      alert(response.statusText);
     }
   }
 }
 
-// Event listener to the signup form to call the signupFormHandler function when the form is submitted
-document.querySelector('.signup-form').addEventListener('submit', signupForm);
+// event handler for form submission
+signupForm.addEventListener('submit', signupFormHandler);

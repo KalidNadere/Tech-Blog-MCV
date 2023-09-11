@@ -1,21 +1,19 @@
-async function deletePostHandler(event) {
-  event.preventDefault();
+const posts = document.querySelectorAll('.delete-post-id');
 
-  // data-id attribute
-  const postId = event.target.getAttribute('data-id');
+async function deletePost(id) {
+  const response = await fetch(`/api/posts/${id}`, {
+    method: 'DELETE',
+  });
 
-  if (postId) {
-    const response = await fetch(`/api/posts/${postId}`, {
-      method: 'DELETE',
-    });
-
-    if (response.ok) {
-      // Reload the page or update the UI as needed
-      document.location.reload();
-    } else {
-      alert('Failed to delete the post');
-    }
+  if (response.ok) {
+    document.location.replace('/dashboard');
+  } else {
+    alert(response.statusText);
   }
 }
 
-document.querySelector('.delete-post-btn').addEventListener('click', deletePostHandler);
+posts.forEach((post) => {
+  post.addEventListener('click', () => {
+    deletePost(post.dataset.postId);
+  });
+});
