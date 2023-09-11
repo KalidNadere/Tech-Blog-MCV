@@ -13,6 +13,10 @@ const Comment = require("./models/Comment");
 const Post = require("./models/Post");
 const path = require('path');
 
+// Routes
+const htmlRoutes = require("./routes/html");
+const apiRoutes = require("./routes/api");
+
 const app = express();
 
 // Middleware
@@ -35,9 +39,10 @@ app.use(
   })
 );
 
-// Routes
-const htmlRoutes = require("./routes/html");
-const apiRoutes = require("./routes/api");
+// Homepage route
+app.get("/", (req, res) => {
+  res.render("home"); 
+});
 
 app.use("/", htmlRoutes);
 app.use("/api", apiRoutes);

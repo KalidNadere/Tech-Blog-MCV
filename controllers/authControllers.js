@@ -5,16 +5,26 @@ const authController = {
   // User registration
   register: async (req, res) => {
     try {
+      // Extract user registration data from request body
       const { username, password } = req.body;
+
+      // Check if username already exists in the database
       const existingUser = await db.User.findOne({ where: { username } });
 
       if (existingUser) {
         return res.status(400).json({ message: "Username already exists" });
       }
 
+      // Hash user's password
       const hashedPassword = await bcrypt.hash(password, 10);
+
+      // Create new user in the database
       await db.User.create({ username, password: hashedPassword });
-      res.status(201).json({ message: "Registration successful" });
+     
+      // res.status(201).json({ message: "Registration successful" });
+      
+      // Send a redirect response to the homepage
+      res.redirect("/");
     } catch (err) {
       res.status(400).json({ message: "Registration failed", error: err.message });
     }
@@ -37,6 +47,7 @@ const authController = {
       }
 
       req.session.user = user;
+      
       res.status(200).json({ message: "Login successful", user });
     } catch (err) {
       res.status(500).json({ message: "Login failed", error: err.message });
@@ -54,6 +65,16 @@ const authController = {
     res.render("signup");
   },
 
+  // Render login page
+  renderLoginPage: (req, res) => {
+    res.render("login");
+  },
+  
+  // Render dashboard page
+  renderDashboardPage: (req, res) => {
+    res.render("dashboard");
+  },
+  
   // Middleware to check if user is authenticated
   isAuthenticated: (req, res, next) => {
     if (req.session.user) {
