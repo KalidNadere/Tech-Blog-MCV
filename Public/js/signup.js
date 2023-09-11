@@ -1,5 +1,5 @@
 // Function to handle user registration when the signup form is submitted
-async function signupFormHandler(event) {
+async function signupForm(event) {
   event.preventDefault(); // Prevent the default form submission behavior
 
   // Getting username and password values entered by the user
@@ -9,7 +9,7 @@ async function signupFormHandler(event) {
   // Checking if both username and password are provided
   if (username && password) { 
     // Sending POST request to the '/api/register' route with the username and password data
-    const response = await fetch('/api/register', {
+    const response = await fetch('/api/users', {
       method: 'POST', // Using POST method for registration
       body: JSON.stringify({ username, password }), // Converting data to JSON format
       headers: { 'Content-Type': 'application/json' }, // Setting request headers
@@ -25,4 +25,4 @@ async function signupFormHandler(event) {
 }
 
 // Event listener to the signup form to call the signupFormHandler function when the form is submitted
-document.querySelector('.signup-form').addEventListener('submit', signupFormHandler);
+document.querySelector('.signup-form').addEventListener('submit', signupForm);

@@ -37,7 +37,7 @@ router.get('/:id', async (req, res) => {
     });
 
     if (!dbUserData) {
-      res.status(404).json({ message: 'No user found with this id' });
+      res.status(404).json({ message: 'User not found with this id' });
       return;
     }
 
@@ -77,14 +77,14 @@ router.post('/login', async (req, res) => {
     });
 
     if (!dbUserData) {
-      res.status(400).json({ message: 'No user with that username!' });
+      res.status(400).json({ message: 'User not found!' });
       return;
     }
 
     const validPassword = dbUserData.checkPassword(req.body.password);
 
     if (!validPassword) {
-      res.status(400).json({ message: 'Incorrect password!' });
+      res.status(400).json({ message: 'Invalid password!' });
       return;
     }
 
@@ -93,7 +93,7 @@ router.post('/login', async (req, res) => {
       req.session.username = dbUserData.username;
       req.session.loggedIn = true;
 
-      res.json({ user: dbUserData, message: 'You are now logged in!' });
+      res.json({ user: dbUserData, message: 'You are logged in!' });
     });
   } catch (err) {
     console.log(err);
@@ -111,8 +111,5 @@ router.post('/logout', (req, res) => {
     res.status(404).end();
   }
 });
-
-module.exports = router;
-
 
 module.exports = router;

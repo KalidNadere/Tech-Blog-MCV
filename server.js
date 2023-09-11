@@ -45,6 +45,7 @@ app.use(express.json()); // Parse JSON request bodies
 app.use(express.urlencoded({
     extended: true
 })); // Parse URL-encoded request bodies
+
 app.use(routes); // Use defined routes/controllers
 
 // Define the api/register route for user registration

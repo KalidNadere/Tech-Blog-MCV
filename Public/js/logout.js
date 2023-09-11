@@ -1,7 +1,7 @@
 // Function to handle logout when the logout link is clicked
-async function logoutHandler() {
+async function logout() {
   // Send a POST request to '/api/logout' route to log user out
-  const response = await fetch('/api/logout', {
+  const response = await fetch('/api//users/logout', {
     method: 'POST', // Use the POST method for logging out
     headers: { 'Content-Type': 'application/json' }, // Set request headers
   });
@@ -16,4 +16,4 @@ async function logoutHandler() {
 }
 
 // Event listener to the logout link to call the logoutHandler function when the link is clicked
-document.querySelector('#logout-link').addEventListener('click', logoutHandler);
+document.querySelector('#logout').addEventListener('click', logout);

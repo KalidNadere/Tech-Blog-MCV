@@ -1,5 +1,5 @@
 // Function to handle login form submission
-async function loginFormHandler(event) {
+async function loginForm(event) {
   event.preventDefault(); // Prevent the default form submission behavior
 
   // Get the username and password values from the form
@@ -8,7 +8,7 @@ async function loginFormHandler(event) {
 
   if (username && password) { // Check if both username and password are provided
     // Send POST request to the '/api/login' route with user credentials
-    const response = await fetch('/api/login', {
+    const response = await fetch('/api/users/login', {
       method: 'POST',
       body: JSON.stringify({ username, password }), // Convert to JSON format
       headers: { 'Content-Type': 'application/json' }, // Set request headers
@@ -25,4 +25,4 @@ async function loginFormHandler(event) {
 }
 
 // Event listener to the login form to call the loginFormHandler function on form submission
-document.querySelector('.login-form').addEventListener('submit', loginFormHandler);
+document.querySelector('.login-form').addEventListener('submit', loginForm);
