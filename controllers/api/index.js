@@ -2,11 +2,11 @@
 const router = require('express').Router();
 
 // Import route modules for home, login, and dachboard
-const homeRoutes = require('./home-routes.js');
-const loginRoutes = require('./login-routes.js');
-const dashboardRoutes = require('./dashboard.js');
+const homeRoutes = require('../home-routes');
+const loginRoutes = require('./login-routes');
+const dashboardRoutes = require('../dashboard-routes');
 
-const apiRoutes = require('./api');
+const apiRoutes = require('../api');
 
 // Define routes and associate them with their respective route modules
 router.use('/', homeRoutes);
