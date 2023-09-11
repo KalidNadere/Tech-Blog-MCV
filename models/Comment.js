@@ -15,8 +15,8 @@ Comment.init(
       primaryKey: true,            
       autoIncrement: true,      
     },
-    // Defining 'comment_text' attribute with specific properties
-    comment_text: {
+    // Defining 'text' attribute with specific properties
+    text: {
       type: DataTypes.STRING,       
       allowNull: false,            
       validate: {
@@ -45,7 +45,7 @@ Comment.init(
   {
     sequelize,    // Passing Sequelize connection instance
     freezeTableName: true,  // Preventing Sequelize from pluralizing the table name
-    underscored: true,   // Using snake_case for column names (e.g., comment_text)
+    underscored: true,   // Using snake_case for column names (e.g., text)
     modelName: 'comment',  // Setting model name to 'comment'
   }
 );

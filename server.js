@@ -45,7 +45,8 @@ app.use(express.json()); // Parse JSON request bodies
 app.use(express.urlencoded({
     extended: true
 })); // Parse URL-encoded request bodies
-app.use(routes); // Use the defined routes/controllers
+app.use(routes); // Use defined routes/controllers
+
 
 sequelize.sync(); // Sync the Sequelize database
 
