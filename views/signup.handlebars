@@ -1,22 +1,26 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Signup</title>
-  <link rel="stylesheet" href="/public/css/style.css">
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up</title>
+    <link rel="stylesheet" href="/public/css/style.css">
 </head>
 <body>
-  <h1>Signup</h1>
-  
-  <form action="/register" method="POST">
-    <label for="username">Username:</label>
-    <input type="text" id="username" name="username" required>
-    
-    <label for="password">Password:</label>
-    <input type="password" id="password" name="password" required>
-    
-    <button type="submit">Signup</button>
-  </form>
-  
+    <h1 class="signup-container">Sign Up</h1>
+
+    <form class="signup-form" action="/api/register" method="POST">
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" required>
+        
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required>
+        
+        <button type="submit" class="btn">Sign Up</button>
+    </form>
+
+    <p>Already have an account? <a href="/login">Login</a></p>
+
+    <script src="/javascript/signup.js"></script>
 </body>
 </html>

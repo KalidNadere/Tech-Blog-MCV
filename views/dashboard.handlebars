@@ -1,26 +1,49 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Dashboard</title>
-  <link rel="stylesheet" href="/public/css/style.css">
-  
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="/public/css/style.css">
 </head>
 <body>
-  <h1 class="login-container">Dashboard</h1>
-  
-  <h2>Your Blog Posts</h2>
-  <ul>
-    {{#each userPosts}}
-      <li>
-        <a href="/post/{{this.id}}">{{this.title}}</a>
-        <button class="edit-post">Edit</button>
-      <button class="delete-post" data-postid="{{this.id}}">Delete</button>
-      </li>
-    {{/each}}
-  </ul>
-  
-  <!-- Button to create a new post -->
-  <button class="create-post">Create New Post</button>
+    <header>
+        <nav>
+            <a href="/dashboard" class="go-back">← Back to dashboard</a>
+            <a href="/logout" class="logout-link">Logout</a>
+        </nav>
+    </header>
 
+    <main class="dashboard-main">
+        <section class="create-post-section">
+            <h2>Create New Post</h2>
+            <form class="new-post-form">
+                <label for="post-title">Title:</label>
+                <input type="text" id="post-title" name="post-title" required>
+                
+                <label for="post-content">Content:</label>
+                <textarea id="post-content" name="post-content" required></textarea>
+                
+                <button type="submit" class="btn">Create</button>
+            </form>
+        </section>
+
+        <section class="user-posts">
+            {{#each posts}}
+                <article class="post">
+                    <h2>{{this.title}}</h2>
+                    <p>{{this.content}}</p>
+                    <p>Posted by: {{this.User.username}}</p>
+
+                    <div class="post-actions">
+                        <button class="edit-post-btn" data-id="{{this.id}}">Edit</button>
+                        <button class="delete-post-btn" data-id="{{this.id}}">Delete</button>
+                    </div>
+                </article>
+            {{/each}}
+        </section>
+    </main>
+
+    <script src="/javascript/create-post.js"></script>
 </body>
 </html>
