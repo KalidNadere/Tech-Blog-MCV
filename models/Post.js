@@ -1,36 +1,42 @@
-const { DataTypes } = require("sequelize");
+// Importing necessary modules
+const { Model, DataTypes } = require('sequelize');
+const sequelize = require('../config/connection');
 
-// Exporting sequelize
-module.exports = (sequelize) => {
+// Creating Post model by extending the Model class
+class Post extends Model {}
 
-// Defines sequelize model Post, with attributes specified within the object. It has 2 attributes, title and content
-  const Post = sequelize.define("Post", { 
+// Initializing the Post model with its attributes and data types
+Post.init(
+  {
+    id: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      primaryKey: true,
+      autoIncrement: true,
+    },
     title: {
       type: DataTypes.STRING,
-      allownull: false,
+      allowNull: false,
     },
     content: {
       type: DataTypes.TEXT,
-      allownull: false,
+      allowNull: false,
     },
-  });
-
-  // Defines associations for Post model
-  Post.associate = function (models) { 
-  // this association establishes relationship between Post model and User model, using belongsTo method
-    Post.belongsTo(models.User, {
-  // foreign key specified to ensure foreign key referencing the user is not null
-      foreignKey: { 
-        allownull: false,
+    user_id: {
+      type: DataTypes.INTEGER,
+      references: {
+        model: 'user', // References 'user' model
+        key: 'id',     // References 'id' field in the 'user' model
       },
-    });
+    },
+  },
+  {
+    sequelize,   // Passing sequelize connection
+    freezeTableName: true, // Prevents pluralization of the table name
+    underscored: true,    // Uses underscores in column names
+    modelName: 'post',   // Model name used in queries
+  }
+);
 
-  // Establishes one-to-many relationship that a post can have many comments
-    Post.hasMany(models.comment, {
-      onDelete: "cascade", // Means if a post is deleted, all associated comments should also be deleted
-    });
-  };
-
-  // Exporting Post model for use in other parts of the app
-  return Post; 
-};
+// Exporting the Post model for use in other parts of the application
+module.exports = Post;
