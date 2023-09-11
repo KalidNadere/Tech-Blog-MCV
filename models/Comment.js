@@ -1,28 +1,54 @@
-const { DataTypes } = require("sequelize");
+// Importing necessary modules from Sequelize and connection configuration
+const { Model, DataTypes } = require('sequelize');
+const sequelize = require('../config/connection');
 
-// Exporting function with 2 parameters; sequelize and DataTypes
-module.exports = (sequelize) => { 
+// Defining Comment class that extends the Sequelize Model class
+class Comment extends Model {}
 
-// Defines sequelize model 'Comment' with attributes specified within object 
-  const Comment = sequelize.define("comment", { 
-    text: {
-      type: DataTypes.TEXT,
-      allowNull: false,
+// Initializing the Comment model with its attributes and data types
+Comment.init(
+  {
+    // Defining 'id' attribute with specific properties
+    id: {
+      type: DataTypes.INTEGER,      
+      allowNull: false,             
+      primaryKey: true,            
+      autoIncrement: true,      
     },
-  });
-
-  Comment.associate = function (models) { // defines associations for Comment
-    Comment.belongsTo(models.User, { // establishes relationship between Comment model and User model
-      foreignKey: { // specified to ensure that foreign key referencing User is not null
-        allowNull: false,
+    // Defining 'comment_text' attribute with specific properties
+    comment_text: {
+      type: DataTypes.STRING,       
+      allowNull: false,            
+      validate: {
+        len: [1],                 
       },
-    });
-    Comment.belongsTo(models.Post, { // Establishes relationship between Comment model and Post model
-      foreignKey: {
-        allowNull: false,
+    },
+    // Defining 'user_id' attribute with specific properties
+    user_id: {
+      type: DataTypes.INTEGER,      
+      allowNull: false,             
+      references: {
+        model: 'user',              
+        key: 'id',                  
       },
-    });
-  };
+    },
+    // Defining 'post_id' attribute with specific properties
+    post_id: {
+      type: DataTypes.INTEGER,      
+      allowNull: false,             
+      references: {
+        model: 'post',              
+        key: 'id',                  
+      },
+    },
+  },
+  {
+    sequelize,    // Passing Sequelize connection instance
+    freezeTableName: true,  // Preventing Sequelize from pluralizing the table name
+    underscored: true,   // Using snake_case for column names (e.g., comment_text)
+    modelName: 'comment',  // Setting model name to 'comment'
+  }
+);
 
-  return Comment; // Exports Comment for use in other parts of the app
-};
+// Exporting Comment model for use in other parts of the application
+module.exports = Comment;
